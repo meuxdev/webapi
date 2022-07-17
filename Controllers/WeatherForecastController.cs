@@ -23,8 +23,8 @@ public class WeatherForecastController : ControllerBase
         {
             ListWeatherForecast = Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
-                Date = DateTime.Now.AddDays(index),
                 TemperatureC = Random.Shared.Next(-20, 55),
+                Date = DateTime.Now.AddDays(index),
                 Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             })
             .ToList();
@@ -33,10 +33,10 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet(Name = "GetWeatherForecast")]
-    [Route("Get/WeatherForecast")]
-    [Route("Get/WeatherForecast2")]
-    [Route("[action]/WeatherForecast3")] // actions refers to the name of method
-    public IEnumerable<WeatherForecast> GetW()
+    // [Route("Get/WeatherForecast")] we can have multiple routes for a request.
+    // [Route("Get/WeatherForecast2")]
+    // [Route("[action]/WeatherForecast3")] // actions refers to the name of method
+    public IEnumerable<WeatherForecast> Get()
     {
         return ListWeatherForecast;
     }
@@ -47,7 +47,7 @@ public class WeatherForecastController : ControllerBase
         return Created("/", w);
     }
 
-    [HttpDelete("{index}/{g}")]
+    [HttpDelete("{index}")]
     public IActionResult DeleteWeatherForecast(int index)
     {
         ListWeatherForecast.RemoveAt(index);

@@ -27,7 +27,10 @@ app.UseAuthorization();
 
 
 // CUSTOM middleware.
-app.UseWelcomePage(); // Shows a welcome page 
+// app.UseWelcomePage(); // Shows a welcome page 
+app.UseTimeMiddleware();
+app.UseLoggerMiddleware();
+
 
 // Before de controllers.
 
