@@ -1,3 +1,4 @@
+using webapi;
 using webapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +9,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IHelloWorldService, HelloWorldService>(); // configurando dependencia
-// Adding the services 
+builder.Services.AddSqlServer<TareasContext>(builder.Configuration.GetConnectionString("SQLDockerDB"));
+// Adding personals the services 
+builder.Services.AddScoped<IHelloWorldService, HelloWorldService>(); 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+
 
 // builder.Services.AddScoped<IHelloWorldService>(p => new HelloWorldService(/* Params */)); // Injectando directamente desde la clase
 

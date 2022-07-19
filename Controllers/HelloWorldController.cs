@@ -8,19 +8,30 @@ namespace webapi.Controllers;
 [Route("api/[controller]")]
 public class HelloWorldController : ControllerBase
 {
-    private readonly ILogger<HelloWorldController> _logger;
+    private readonly ILogger<HelloWorldController> logger;
 
-    private readonly IHelloWorldService _helloWorldService;
+    private readonly IHelloWorldService helloWorldService;
 
-    public HelloWorldController(ILogger<HelloWorldController> logger, IHelloWorldService helloWorldService)
+    private readonly TareasContext dbContext;
+
+    public HelloWorldController(ILogger<HelloWorldController> _logger, IHelloWorldService _helloWorldService, TareasContext _dbContext)
     {
-        _logger = logger;
-        _helloWorldService = helloWorldService;
+        logger = _logger;
+        helloWorldService = helloWorldService;
+        dbContext = _dbContext;
     }
 
     [HttpGet]
     public IActionResult Get()
     {
-        return Ok(_helloWorldService.GetHelloWorld());
+        return Ok(helloWorldService.GetHelloWorld());
+    }
+
+    [HttpGet]
+    [Route("createdb")]
+    public IActionResult EnsureCreated()
+    {
+        dbContext.Database.EnsureCreated();
+        return Ok();
     }
 }

@@ -4,8 +4,8 @@ namespace webapi.Services;
 public class CategoryService : ICategoryService
 {
     TareasContext context;
-    
-    public CategoryService(TareasContext _context) 
+
+    public CategoryService(TareasContext _context)
     {
         context = _context; // Context db
     }
@@ -21,7 +21,7 @@ public class CategoryService : ICategoryService
         context.SaveChanges();
     }
 
-    public async Task SaveAsync(Categoria categoria) 
+    public async Task SaveAsync(Categoria categoria)
     {
         context.Add(categoria);
         await context.SaveChangesAsync();
@@ -31,7 +31,7 @@ public class CategoryService : ICategoryService
     {
         Categoria currentCategory = context.Categorias.Find(id);
 
-        if(currentCategory != null) 
+        if (currentCategory != null)
         {
             currentCategory.Nombre = categoria.Nombre;
             currentCategory.Descripcion = categoria.Descripcion;
@@ -45,12 +45,24 @@ public class CategoryService : ICategoryService
     {
         Categoria currentCategory = context.Categorias.Find(id);
 
-        if(currentCategory != null) 
+        if (currentCategory != null)
         {
             context.Remove(currentCategory);
             await context.SaveChangesAsync();
         }
 
+    }
+
+    public Categoria ParseDto(CategoryPostDto dto, Guid id)
+    {
+        // If not using Id and this is a new Object Pass the Guid Empty
+        return new Categoria()
+        {
+            CategoriaId = id == Guid.Empty ? Guid.NewGuid() : id,
+            Nombre = dto.Nombre,
+            Descripcion = dto.Descripcion,
+            Peso = dto.Peso,
+        };
     }
 }
 
@@ -66,5 +78,7 @@ public interface ICategoryService
     Task UpdateAsync(Guid id, Categoria category);
 
     Task DeleteAsync(Guid id);
+
+    Categoria ParseDto(CategoryPostDto dto, Guid id);
 
 }
