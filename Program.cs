@@ -1,3 +1,5 @@
+using webapi.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IHelloWorldService, HelloWorldService>(); // configurando dependencia
+// Adding the services 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
+
 // builder.Services.AddScoped<IHelloWorldService>(p => new HelloWorldService(/* Params */)); // Injectando directamente desde la clase
 
 var app = builder.Build();
