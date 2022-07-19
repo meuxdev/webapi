@@ -10,16 +10,17 @@ public class HelloWorldController : ControllerBase
 {
     private readonly ILogger<HelloWorldController> _logger;
 
-    IHelloWorldService helloWorldService;
+    private readonly IHelloWorldService _helloWorldService;
 
     public HelloWorldController(ILogger<HelloWorldController> logger, IHelloWorldService helloWorldService)
     {
         _logger = logger;
-        this.helloWorldService = helloWorldService;
+        _helloWorldService = helloWorldService;
     }
 
+    [HttpGet]
     public IActionResult Get()
     {
-        return Ok(helloWorldService.GetHelloWorld());
+        return Ok(_helloWorldService.GetHelloWorld());
     }
 }

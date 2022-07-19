@@ -32,12 +32,13 @@ public class WeatherForecastController : ControllerBase
 
     }
 
-    [HttpGet(Name = "GetWeatherForecast")]
-    // [Route("Get/WeatherForecast")] we can have multiple routes for a request.
+    // [HttpGet(Name = "GetWeatherForecast")]
+    // [Route("Get/WeatherForecast")] //we can have multiple routes for a request.
     // [Route("Get/WeatherForecast2")]
-    // [Route("[action]/WeatherForecast3")] // actions refers to the name of method
+    [HttpGet]
     public IEnumerable<WeatherForecast> Get()
     {
+        // _logger.LogWarning("Returning the list of weather forecast");
         return ListWeatherForecast;
     }
 
