@@ -5,7 +5,7 @@ namespace webapi.Models;
 
 public class Categoria : CategoryBase
 {
-    public Guid CategoriaId { get; set; }
+    public Guid CategoriaId { get; init; }
 
     [JsonIgnore]
     public virtual ICollection<Tarea> Tareas { get; set; }

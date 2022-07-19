@@ -17,7 +17,7 @@ public class HelloWorldController : ControllerBase
     public HelloWorldController(ILogger<HelloWorldController> _logger, IHelloWorldService _helloWorldService, TareasContext _dbContext)
     {
         logger = _logger;
-        helloWorldService = helloWorldService;
+        helloWorldService = _helloWorldService;
         dbContext = _dbContext;
     }
 
