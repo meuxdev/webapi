@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using webapi.Services;
 using webapi.Models;
@@ -24,9 +20,15 @@ public class CategoryController : ControllerBase
 
 
     [HttpGet]
-    public IActionResult Get()
+    public IActionResult GetAll()
     {
-        return Ok(categoryService.Get());
+        return Ok(categoryService.GetAll());
+    }
+
+    [HttpGet("{id}")]
+    public IActionResult Get(Guid id)
+    {
+        return Ok(categoryService.GetById(id));
     }
 
     [HttpPost]

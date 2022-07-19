@@ -10,7 +10,7 @@ public class CategoryService : ICategoryService
         context = _context; // Context db
     }
 
-    public IEnumerable<Categoria> Get()
+    public IEnumerable<Categoria> GetAll()
     {
         return context.Categorias;
     }
@@ -29,7 +29,7 @@ public class CategoryService : ICategoryService
 
     public async Task UpdateAsync(Guid id, Categoria categoria)
     {
-        Categoria currentCategory = context.Categorias.Find(id);
+        Categoria? currentCategory = context.Categorias.Find(id);
 
         if (currentCategory != null)
         {
@@ -43,7 +43,7 @@ public class CategoryService : ICategoryService
 
     public async Task DeleteAsync(Guid id)
     {
-        Categoria currentCategory = context.Categorias.Find(id);
+        Categoria? currentCategory = context.Categorias.Find(id);
 
         if (currentCategory != null)
         {
@@ -64,12 +64,19 @@ public class CategoryService : ICategoryService
             Peso = dto.Peso,
         };
     }
+
+    public Categoria? GetById(Guid id)
+        => context.Categorias.Find(id);
+
+
 }
 
 
 public interface ICategoryService
 {
-    IEnumerable<Categoria> Get();
+    IEnumerable<Categoria> GetAll();
+
+    Categoria? GetById(Guid id);
 
     void Save(Categoria category);
 
