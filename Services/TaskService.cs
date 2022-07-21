@@ -1,4 +1,6 @@
 using webapi.Models;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace webapi.Services;
 
@@ -9,56 +11,92 @@ public class TaskService : ITaskService
 
     public TaskService(TareasContext _context)
     {
-       context = _context;
+        context = _context;
     }
 
-    public async Task Delete(Guid id)
+    public async Task<Tarea?> Delete(Guid id)
     {
         var currentTask = context.Tareas.Find(id);
 
-        if(currentTask != null) 
+        if (currentTask != null)
         {
             context.Remove<Tarea>(currentTask);
             await context.SaveChangesAsync();
         }
+        return currentTask;
     }
 
-    public IEnumerable<Tarea> Get()
+    public IEnumerable<Tarea> GetAll()
     {
-        return context.Tareas;
+        return context.Tareas.Include(task => task.Categoria);
     }
 
-    public async Task Save(Tarea task)
+    public async Task<Tarea?> GetById(Guid id)
     {
-        context.Add<Tarea>(task);
-        await context.SaveChangesAsync();
+        Tarea? t = await context.Tareas.FindAsync(id);
+        return t;
     }
 
-    public async Task Update(Guid id, Tarea task)
+    public async Task<Tarea?> Save(PostTaskRequestDto dto)
     {
-        var currentTask = context.Tareas.Find(id);
+        Categoria? category = await context.Categorias.FindAsync(dto.CategoriaId);
 
-        if(currentTask != null) 
+        if (category == null)
         {
-            currentTask.CategoriaId = task.CategoriaId;
-            currentTask.Descripcion = task.Descripcion;
-            currentTask.PrioridadTarea = task.PrioridadTarea;
-            currentTask.Titulo = task.Titulo;
+            return null;
+        }
+
+        Tarea newTask = TareaFactory.ParsePostDto(dto);
+        context.Add<Tarea>(newTask);
+        await context.SaveChangesAsync();
+        return newTask;
+    }
+
+    public async Task<Tarea?> Update(Guid id, PutTaskRequestDto dto)
+    {
+        var currentTask = await context.Tareas.FindAsync(id);
+
+
+
+        if (currentTask != null)
+        {
+            if (currentTask.CategoriaId != dto.CategoriaId)
+            {
+                // category update,
+                // validate that the category exists
+                var category = await context.Categorias.FindAsync(dto.CategoriaId);
+                if (category != null)
+                {
+                    currentTask.CategoriaId = category.CategoriaId;
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            currentTask.Descripcion = dto.Descripcion;
+            currentTask.PrioridadTarea = dto.PrioridadTarea;
+            currentTask.Titulo = dto.Titulo;
             await context.SaveChangesAsync();
         }
+        return currentTask;
     }
+
 }
 
 
-public interface ITaskService 
+public interface ITaskService
 {
 
-    IEnumerable<Tarea> Get();
+    IEnumerable<Tarea> GetAll(); // returns all the tasks in the db context
 
-    Task Save(Tarea task);
+    Task<Tarea?> GetById(Guid id);
 
-    Task Delete(Guid id);
+    Task<Tarea?> Save(PostTaskRequestDto dto); // Saves a task in the db context
 
-    Task Update(Guid id, Tarea task);
+    Task<Tarea?> Delete(Guid id); // Deletes one task in the db context
+
+    Task<Tarea?> Update(Guid id, PutTaskRequestDto task); // Updates the task in the db context
 
 }

@@ -14,6 +14,8 @@ builder.Services.AddSqlServer<TareasContext>(builder.Configuration.GetConnection
 builder.Services.AddScoped<IHelloWorldService, HelloWorldService>(); 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+// services.AddControllers().AddNewtonsoftJson();
+
 
 
 // builder.Services.AddScoped<IHelloWorldService>(p => new HelloWorldService(/* Params */)); // Injectando directamente desde la clase
@@ -41,6 +43,7 @@ app.UseAuthorization();
 // app.UseWelcomePage(); // Shows a welcome page 
 // app.UseTimeMiddleware();
 app.UseLoggerMiddleware();
+app.UseCategoryValidateMiddleware();
 
 
 // Before de controllers.
